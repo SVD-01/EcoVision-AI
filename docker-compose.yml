@@ -1,0 +1,96 @@
+version: '3.8'
+
+services:
+  ecovision-ai-engine:
+    build:
+      context: ./ai-engine
+      dockerfile: Dockerfile
+    container_name: ecovision_ai_engine
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - AI_PORT=8000
+      - AI_ENVIRONMENT=production
+      - AI_MONGO_URI=mongodb://mongodb:27017/ecovision_ai_engine
+      - AI_REDIS_URL=redis://redis:6379/1
+      - AI_BACKEND_URL=http://ecovision-api:5000
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - ecovision_net
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  ecovision-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ecovision_app
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - MONGO_URI=mongodb://mongodb:27017/ecovision_ai
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=ecovision_super_secret_jwt_key_2026_enterprise
+      - REFRESH_TOKEN_SECRET=ecovision_refresh_token_secret_key_2026
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - ecovision_net
+
+  mongodb:
+    image: mongo:7.0
+    container_name: ecovision_mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+      - ./scripts/init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+    networks:
+      - ecovision_net
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: ecovision_mongo_express
+    restart: always
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_BASICAUTH: false
+    depends_on:
+      - mongodb
+    networks:
+      - ecovision_net
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: ecovision_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - ecovision_net
+
+networks:
+  ecovision_net:
+    driver: bridge
+
+volumes:
+  mongo_data:
+  redis_data:

@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+
+# Build output
+dist/
+build/
+
+# Environment files (contain secrets)
+.env
+.env.local
+.env.production
+ai-engine/.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Uploads & temp files
+server/uploads/temp/
+ai-engine/uploads/
+ai-engine/models/registry/
+ai-engine/datasets/
+
+# OS
+.DS_Store
+*.pem

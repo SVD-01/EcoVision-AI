@@ -1,0 +1,829 @@
+
+================================================================================
+  ECOVISION AI - COMPLETE FOLLOW-UP INSTRUCTIONS
+  After Downloading the ZIP Folder
+================================================================================
+
+  Read this file from top to bottom. Follow every step in order.
+  Total setup time: 5 to 15 minutes depending on which option you pick.
+
+================================================================================
+  TABLE OF CONTENTS
+================================================================================
+
+  SECTION 1  -  EXTRACT THE ZIP
+  SECTION 2  -  INSTALL NODE.JS (if you don't have it)
+  SECTION 3  -  INSTALL DEPENDENCIES
+  SECTION 4  -  CHOOSE YOUR RUN MODE
+                 MODE A  -  Frontend Only (Zero Setup)
+                 MODE B  -  Frontend + Backend (Need MongoDB)
+                 MODE C  -  Full System with AI Engine (Need Python)
+                 MODE D  -  Docker (One Command)
+  SECTION 5  -  WHAT TO DO AFTER THE APP IS RUNNING
+  SECTION 6  -  ENV FILE EXPLAINED LINE BY LINE
+  SECTION 7  -  OPTIONAL FEATURES AND HOW TO ENABLE THEM
+  SECTION 8  -  COMMON ERRORS AND FIXES
+  SECTION 9  -  PROJECT FOLDER STRUCTURE EXPLAINED
+  SECTION 10 -  HOW TO DEPLOY TO PRODUCTION
+
+================================================================================
+  SECTION 1  -  EXTRACT THE ZIP
+================================================================================
+
+  1. Download the ZIP file from the platform.
+
+  2. Extract it to a folder on your computer.
+     - Windows: Right-click the ZIP → Extract All
+     - macOS: Double-click the ZIP
+     - Linux: unzip filename.zip
+
+  3. Open a terminal or command prompt.
+
+  4. Navigate into the extracted folder:
+
+     cd path/to/ecovision-ai
+
+     For example:
+     cd C:\Users\YourName\Downloads\ecovision-ai       (Windows)
+     cd ~/Downloads/ecovision-ai                        (macOS/Linux)
+
+  5. Verify you are in the right folder. Run:
+
+     ls
+
+     You should see these files and folders:
+       - package.json
+       - src/
+       - server/
+       - ai-engine/
+       - .env
+       - docker-compose.yml
+       - SETUP_GUIDE.md
+       - index.html
+
+     If you see them, you are in the correct directory. Continue.
+
+================================================================================
+  SECTION 2  -  INSTALL NODE.JS (if you don't have it)
+================================================================================
+
+  Check if Node.js is already installed:
+
+     node --version
+
+  If you see a version number like v18.x.x or v20.x.x or higher, skip to
+  Section 3.
+
+  If you get "command not found" or an error, install Node.js:
+
+  --- Windows ---
+  1. Go to https://nodejs.org
+  2. Download the LTS version (the big green button)
+  3. Run the installer, click Next through everything
+  4. Restart your terminal after installation
+  5. Verify: node --version
+
+  --- macOS ---
+  Option A (recommended):
+     brew install node
+
+  Option B:
+     Download from https://nodejs.org and run the .pkg installer
+
+  --- Linux (Ubuntu/Debian) ---
+     curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+     sudo apt install -y nodejs
+
+  --- Linux (Fedora) ---
+     sudo dnf install nodejs
+
+  After installing, verify both of these work:
+     node --version      (should show v18+ or v20+)
+     npm --version       (should show 9+ or 10+)
+
+================================================================================
+  SECTION 3  -  INSTALL DEPENDENCIES
+================================================================================
+
+  Make sure you are inside the project folder (where package.json is).
+  Then run:
+
+     npm install
+
+  This will take 1 to 3 minutes. It downloads all JavaScript libraries.
+
+  You will see some warnings. That is normal. Ignore them.
+  The only thing that matters is that it does NOT end with a red error
+  saying "npm ERR! code ERESOLVE" or similar. If it does, run:
+
+     npm install --legacy-peer-deps
+
+  When it finishes, you will see a node_modules folder appear. Good.
+
+================================================================================
+  SECTION 4  -  CHOOSE YOUR RUN MODE
+================================================================================
+
+  There are 4 ways to run this project. Pick the one that matches your
+  situation.
+
+
+  ---- MODE A: FRONTEND ONLY (Zero Setup, Recommended for First Try) ----
+
+  This runs ONLY the React frontend. All data is mocked inside the
+  browser. No database, no Python, no backend server needed.
+
+  Steps:
+
+     npm run dev
+
+  That is it. One command.
+
+  Open your browser and go to:
+
+     http://localhost:5173
+
+  You will see the full EcoVision AI platform. Every page works:
+  - Landing page with 3D Earth
+  - AI Scanner with drag-and-drop
+  - Recycling Centers map
+  - Analytics Dashboard
+  - AI Ops Dashboard
+  - Gamification with challenges
+  - User Profile
+  - Login/Register forms
+  - AI Chatbot assistant
+  - Smart Bin QR module
+  - Reports
+  - Circular Economy education
+
+  To stop the server, press Ctrl+C in the terminal.
+
+
+  ---- MODE B: FRONTEND + NODE.JS BACKEND ----
+
+  This runs the React frontend AND the Express.js backend server.
+  The backend provides real REST APIs, JWT authentication, Socket.IO,
+  and connects to MongoDB for data persistence.
+
+  What you need additionally: MongoDB
+
+  STEP B1 - Install MongoDB (pick one option)
+
+     OPTION 1: MongoDB Atlas (FREE cloud database, easiest)
+
+        1. Go to https://www.mongodb.com/atlas
+        2. Click "Try Free" and create an account
+        3. Choose the FREE M0 tier (shared cluster)
+        4. Choose any cloud provider and region (pick the closest)
+        5. Click "Create Deployment"
+        6. Create a database user:
+           - Username: ecovision
+           - Password: (pick a strong password, no special characters)
+           - Click "Create User"
+        7. For IP Access, click "Add My Current IP Address"
+           Or click "Allow Access from Anywhere" (0.0.0.0/0) for simplicity
+        8. Click "Finish and Close"
+        9. On the Clusters page, click "Connect"
+        10. Click "Drivers"
+        11. Copy the connection string. It looks like:
+            mongodb+srv://ecovision:<password>@cluster0.abc123.mongodb.net/?retryWrites=true&w=majority
+        12. Replace <password> with the password you created in step 6
+
+     OPTION 2: Local MongoDB (install on your machine)
+
+        macOS:
+           brew tap mongodb/brew
+           brew install mongodb-community@7.0
+           brew services start mongodb-community@7.0
+
+        Windows:
+           1. Go to https://www.mongodb.com/try/download/community
+           2. Download the MSI installer for Windows
+           3. Run it, choose "Complete" installation
+           4. Check "Install MongoDB as a Service"
+           5. Finish the installer
+           MongoDB will auto-start as a Windows service.
+
+        Ubuntu/Debian:
+           sudo apt-get install gnupg curl
+           curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | sudo gpg -o /usr/share/keyrings/mongodb-server-7.0.gpg --dearmor
+           echo "deb [ signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+           sudo apt-get update
+           sudo apt-get install -y mongodb-org
+           sudo systemctl start mongod
+           sudo systemctl enable mongod
+
+     OPTION 3: Skip MongoDB entirely
+
+        The backend starts without MongoDB. It prints a warning but
+        continues running. All APIs return mock data. This is fine for
+        development and testing.
+
+  STEP B2 - Edit the .env file
+
+     Open the file named .env in the project root with any text editor.
+
+     IF YOU USED ATLAS (Option 1):
+        Find this line:
+           MONGO_URI=mongodb://localhost:27017/ecovision_ai
+        Replace it with your Atlas connection string:
+           MONGO_URI=mongodb+srv://ecovision:YOUR_PASSWORD@cluster0.abc123.mongodb.net/ecovision_ai?retryWrites=true&w=majority
+        
+        IMPORTANT: Add /ecovision_ai before the ? in the URL.
+        That is the database name.
+
+     IF YOU INSTALLED LOCAL MONGODB (Option 2):
+        Keep the default. No changes needed.
+
+     IF YOU SKIPPED MONGODB (Option 3):
+        Keep the default. No changes needed.
+
+  STEP B3 - Run the backend
+
+     Open a terminal in the project root and run:
+
+        npm run dev:server
+
+     You should see output like:
+        EcoVision AI Enterprise Backend Running on Port 5000
+        REST API Prefix: http://localhost:5000/api/v1
+        Swagger Docs: http://localhost:5000/api/docs
+
+     If MongoDB is connected you will also see:
+        MongoDB Connected: cluster0-shard-xxxxx/ecovision_ai
+
+     If MongoDB is NOT connected you will see:
+        MongoDB Connection Failed... Running in fallback/in-memory mode.
+        (This is fine. The app still works.)
+
+  STEP B4 - Run the frontend
+
+     Open a SECOND terminal (keep the backend running) and run:
+
+        npm run dev
+
+  STEP B5 - Open in browser
+
+     http://localhost:5173  (frontend)
+     http://localhost:5000/api/v1/health  (backend health check)
+     http://localhost:5000/api/docs  (Swagger API documentation)
+
+  To stop both servers, press Ctrl+C in each terminal.
+
+
+  ---- MODE C: FULL SYSTEM WITH AI ENGINE ----
+
+  This adds the Python FastAPI AI microservice on top of Mode B.
+  The AI Engine provides real neural network inference simulation,
+  model registry, training history, GPU monitoring, and ops analytics.
+
+  What you need additionally: Python 3.10 or higher
+
+  STEP C1 - Check if Python is installed
+
+     python --version     or    python3 --version
+
+     You need 3.10 or higher. If not installed:
+
+     macOS:
+        brew install python@3.11
+
+     Windows:
+        1. Go to https://www.python.org/downloads/
+        2. Download Python 3.11 or 3.12
+        3. IMPORTANT: Check "Add Python to PATH" during installation
+        4. Run the installer
+
+     Ubuntu:
+        sudo apt install python3 python3-pip python3-venv
+
+  STEP C2 - Set up the AI Engine
+
+     Open a THIRD terminal. Navigate to the ai-engine folder:
+
+        cd ai-engine
+
+     Create a virtual environment:
+
+        python -m venv venv          or     python3 -m venv venv
+
+     Activate the virtual environment:
+
+        macOS/Linux:
+           source venv/bin/activate
+
+        Windows Command Prompt:
+           venv\Scripts\activate.bat
+
+        Windows PowerShell:
+           venv\Scripts\Activate.ps1
+
+     When activated, your prompt will show (venv) at the beginning.
+
+     Install Python dependencies:
+
+        pip install fastapi uvicorn pydantic pydantic-settings python-multipart httpx structlog numpy Pillow scikit-learn pandas
+
+     This takes 1 to 5 minutes.
+
+  STEP C3 - Start the AI Engine
+
+     While still in the ai-engine folder with venv activated:
+
+        python main.py
+
+     You should see:
+        EcoVision AI Engine v2.4.0 started on port 8000
+        Model: ecovision-yolov8-waste-v2 v2.4.0
+        Docs: http://localhost:8000/docs
+
+  STEP C4 - Start Backend and Frontend
+
+     In separate terminals (same as Mode B):
+
+        Terminal 2:  npm run dev:server
+        Terminal 3:  npm run dev
+
+  STEP C5 - Verify everything is connected
+
+     http://localhost:5173          (frontend)
+     http://localhost:5000/api/v1/health  (backend)
+     http://localhost:8000/docs     (AI Engine Swagger docs)
+     http://localhost:8000/api/v1/health  (AI Engine health)
+
+     In the frontend, click "AI Ops" in the top navigation bar.
+     You should see live model metrics, GPU telemetry, training charts,
+     confusion matrix heatmap, and deployment history.
+
+     Go to "Scanner" and upload or scan an image. The prediction now
+     comes from the AI Engine instead of mock data.
+
+  To stop everything, press Ctrl+C in each of the 3 terminals.
+
+
+  ---- MODE D: DOCKER (Everything in One Command) ----
+
+  This starts ALL services using Docker containers.
+
+  STEP D1 - Install Docker Desktop
+
+     Download from: https://www.docker.com/products/docker-desktop
+
+     macOS: Download and drag to Applications
+     Windows: Download and run the installer (enable WSL2 if prompted)
+     Linux: Follow https://docs.docker.com/engine/install/
+
+     After installing, open Docker Desktop and wait until it shows "Running".
+
+  STEP D2 - Build and start everything
+
+     In the project root folder, run:
+
+        docker-compose up --build
+
+     First time takes 5 to 10 minutes (downloads images, builds containers).
+     Subsequent starts take about 15 seconds.
+
+  STEP D3 - Open in browser
+
+     http://localhost:5000       (Full app - frontend served by backend)
+     http://localhost:8000/docs  (AI Engine API docs)
+     http://localhost:8081       (Mongo Express - database admin GUI)
+
+  STEP D4 - Stop everything
+
+     Press Ctrl+C in the terminal, then:
+
+        docker-compose down
+
+     To also delete all data (start fresh):
+
+        docker-compose down -v
+
+================================================================================
+  SECTION 5  -  WHAT TO DO AFTER THE APP IS RUNNING
+================================================================================
+
+  Once the app is open in your browser, here is what to explore:
+
+  1. LANDING PAGE (/)
+     - Scroll down to see the 3D Earth, animated counters, AI workflow,
+       scanner preview, circular economy visualization, analytics charts,
+       testimonials, and FAQ sections
+
+  2. AI SCANNER (/scanner)
+     - Click the drop zone to upload any image (a photo of a bottle,
+       cardboard box, banana peel, battery, etc.)
+     - Or click "Live camera" to use your webcam
+     - Watch the scanning animation and see the AI prediction card
+     - Click "Report" to download a text file with the scan results
+
+  3. RECYCLING MAP (/map)
+     - Browse recycling centers with search and waste type filters
+     - Click a center to see details and navigation link
+     - If you add VITE_GOOGLE_MAPS_API_KEY to .env, real Google Maps appear
+
+  4. ANALYTICS (/analytics)
+     - View Eco Score, Carbon Saved, Water Conserved metrics
+     - Interactive charts: Area, Bar, Line, Pie with Recharts
+
+  5. AI OPS DASHBOARD (/ai-ops)
+     - Model accuracy, precision, recall, F1, mAP metrics
+     - Training loss and accuracy curves (100 epochs)
+     - Confusion matrix heatmap
+     - GPU/CPU/Memory/Storage telemetry bars
+     - Prediction throughput timeline (24h)
+     - Confidence distribution histogram
+     - Model registry with 4 versions
+     - Deployment history timeline
+     - Dataset versioning
+     - System alerts
+     - Service health status
+
+  6. GAMIFICATION (/gamification)
+     - Eco Points, XP, Level, Streak tracking
+     - Achievements with progress bars
+     - Daily and weekly challenges (click "Claim" for confetti)
+     - Global leaderboard
+     - Rewards vault
+
+  7. CIRCULAR ECONOMY (/circular-economy)
+     - Animated lifecycle diagram
+     - Material-specific recycling guides
+     - Interactive quiz with scoring
+
+  8. SMART BIN (/smart-bin)
+     - QR code pairing simulation
+     - Live bin fill level indicators
+     - IoT event feed
+
+  9. PROFILE (/profile)
+     - Upload avatar
+     - Edit name and city
+     - Toggle notification preferences
+     - View scan history and metrics
+     - Download reports
+
+  10. AUTH PAGES (/login, /register, /verify-otp, /forgot-password, /reset-password)
+      - Fully validated forms with Zod and React Hook Form
+      - Click "Continue" to simulate JWT login
+
+  11. AI CHATBOT (floating green button, bottom-right)
+      - Click the sparkle button in the bottom-right corner
+      - Try prompts like "How do I recycle a battery?" or "Create a compost guide"
+      - Supports language selection (English, Spanish, French placeholders)
+
+  12. REPORTS (/reports)
+      - Click "Download summary" to get a text report file
+      - Browse report library
+
+================================================================================
+  SECTION 6  -  ENV FILE EXPLAINED LINE BY LINE
+================================================================================
+
+  The .env file is in the project root. Here is every variable:
+
+  --- BACKEND VARIABLES (used by server/) ---
+
+  NODE_ENV=development
+     Set to "production" when deploying. Controls error detail level.
+
+  PORT=5000
+     The port the backend API runs on. Change if 5000 is occupied.
+
+  API_PREFIX=/api/v1
+     All API routes start with this. Do not change.
+
+  CLIENT_URL=http://localhost:5173
+     Where the frontend is running. Used for CORS.
+
+  MONGO_URI=mongodb://localhost:27017/ecovision_ai
+     MongoDB connection string. Change for Atlas or remote database.
+
+  REDIS_URL=redis://localhost:6379
+     Redis connection. App works without Redis (uses in-memory cache).
+
+  JWT_SECRET=ecovision_super_secret_jwt_key_2026_enterprise
+     Secret key for signing JWT tokens. CHANGE THIS IN PRODUCTION.
+
+  JWT_EXPIRES_IN=15m
+     How long access tokens are valid. Default 15 minutes.
+
+  REFRESH_TOKEN_SECRET=ecovision_refresh_token_secret_key_2026
+     Secret key for refresh tokens. CHANGE THIS IN PRODUCTION.
+
+  REFRESH_TOKEN_EXPIRES_IN=7d
+     How long refresh tokens last. Default 7 days.
+
+  COOKIE_SECRET=ecovision_cookie_signer
+     Secret for signed cookies. CHANGE THIS IN PRODUCTION.
+
+  BCRYPT_SALT_ROUNDS=12
+     Password hashing strength. Higher = slower but more secure.
+
+  RATE_LIMIT_WINDOW_MS=900000
+     Rate limit window in milliseconds. Default 15 minutes.
+
+  RATE_LIMIT_MAX=500
+     Max requests per IP in the rate limit window.
+
+  STORAGE_PROVIDER=local
+     Where uploaded images are stored. Options: local, s3, cloudinary
+
+  CLOUDINARY_CLOUD_NAME=
+  CLOUDINARY_API_KEY=
+  CLOUDINARY_API_SECRET=
+     Fill these if using Cloudinary for image storage.
+
+  AWS_S3_BUCKET=ecovision-ai-uploads
+  AWS_REGION=us-west-2
+  AWS_ACCESS_KEY_ID=
+  AWS_SECRET_ACCESS_KEY=
+     Fill these if using AWS S3 for image storage.
+
+  SMTP_HOST=smtp.mailtrap.io
+  SMTP_PORT=2525
+  SMTP_USER=test_user
+  SMTP_PASS=test_pass
+  EMAIL_FROM=no-reply@ecovision.ai
+     Email service configuration. Default is mock mode (logs to console).
+     For real emails, use SendGrid, AWS SES, or Mailtrap.
+
+  OPENAI_API_KEY=mock-openai-key
+     OpenAI API key. Set a real key to enable GPT-4 Vision for waste detection.
+
+  GEMINI_API_KEY=mock-gemini-key
+     Google Gemini API key. Set a real key to enable Gemini Vision.
+
+  AI_ENGINE_URL=http://localhost:8000
+     URL of the Python AI Engine microservice.
+
+  --- FRONTEND VARIABLES (used by src/, must start with VITE_) ---
+
+  VITE_API_URL=http://localhost:5000/api/v1
+     Where the frontend sends API requests. Must match backend PORT.
+
+  VITE_AI_ENGINE_URL=http://localhost:8000
+     Where the AI Ops Dashboard fetches AI engine data from.
+
+  VITE_GOOGLE_MAPS_API_KEY=
+     Google Maps JavaScript API key. Leave empty for fallback map.
+     Get a free key: https://console.cloud.google.com/google/maps-apis
+
+================================================================================
+  SECTION 7  -  OPTIONAL FEATURES AND HOW TO ENABLE THEM
+================================================================================
+
+  GOOGLE MAPS (real map instead of simulated)
+  1. Go to https://console.cloud.google.com
+  2. Create a project (or select existing)
+  3. Enable "Maps JavaScript API"
+  4. Go to Credentials → Create Credentials → API Key
+  5. Copy the key
+  6. Add to .env: VITE_GOOGLE_MAPS_API_KEY=AIzaSy...your_key_here
+  7. Restart the frontend: npm run dev
+
+  OPENAI VISION (real AI image analysis)
+  1. Go to https://platform.openai.com/api-keys
+  2. Create a new API key
+  3. Add to .env: OPENAI_API_KEY=sk-...your_key_here
+  4. Restart the backend: npm run dev:server
+
+  CLOUDINARY (cloud image storage)
+  1. Sign up at https://cloudinary.com (free tier available)
+  2. Go to Dashboard and copy Cloud Name, API Key, API Secret
+  3. Add to .env:
+     STORAGE_PROVIDER=cloudinary
+     CLOUDINARY_CLOUD_NAME=your_cloud_name
+     CLOUDINARY_API_KEY=your_key
+     CLOUDINARY_API_SECRET=your_secret
+  4. Restart the backend
+
+  REAL EMAIL SENDING (with Mailtrap for testing)
+  1. Sign up at https://mailtrap.io (free tier)
+  2. Go to Inboxes → SMTP Settings
+  3. Copy host, port, username, password
+  4. Add to .env:
+     SMTP_HOST=sandbox.smtp.mailtrap.io
+     SMTP_PORT=2525
+     SMTP_USER=your_mailtrap_username
+     SMTP_PASS=your_mailtrap_password
+  5. Restart the backend
+
+  GPU ACCELERATION FOR AI ENGINE (requires NVIDIA GPU + CUDA)
+  1. Install CUDA Toolkit: https://developer.nvidia.com/cuda-downloads
+  2. Install PyTorch with CUDA: pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+  3. Edit ai-engine/.env: AI_USE_GPU=true
+  4. Restart the AI engine
+
+================================================================================
+  SECTION 8  -  COMMON ERRORS AND FIXES
+================================================================================
+
+  ERROR: "npm install" fails with ERESOLVE
+  FIX:   Run: npm install --legacy-peer-deps
+
+  ERROR: "EADDRINUSE: port 5000 already in use"
+  CAUSE: macOS AirPlay Receiver uses port 5000
+  FIX:   Open .env, change PORT=5001
+         Also change VITE_API_URL=http://localhost:5001/api/v1
+         Restart both servers
+
+  ERROR: "EADDRINUSE: port 5173 already in use"
+  FIX:   Another Vite dev server is running. Close it or use: npx kill-port 5173
+
+  ERROR: "MongoDB Connection Failed"
+  CAUSE: MongoDB is not running or connection string is wrong
+  FIX:   Check if MongoDB is running:
+         Local: Run "mongosh" in terminal. If it connects, MongoDB is OK.
+         Atlas: Double-check the connection string, username, password, and
+                that your IP is whitelisted in Atlas Network Access.
+  NOTE:  The backend STILL WORKS without MongoDB. It uses mock data.
+
+  ERROR: "Cannot find module 'tsx'"
+  FIX:   Run: npx tsx server/index.ts
+         (npx downloads tsx automatically)
+         Or install it: npm install -g tsx
+
+  ERROR: "python: command not found"
+  FIX:   Try "python3" instead of "python"
+         Or install Python from https://www.python.org/downloads/
+
+  ERROR: "ModuleNotFoundError: No module named 'fastapi'"
+  CAUSE: Python dependencies not installed or venv not activated
+  FIX:   cd ai-engine
+         source venv/bin/activate   (or venv\Scripts\activate on Windows)
+         pip install fastapi uvicorn pydantic pydantic-settings python-multipart numpy Pillow
+
+  ERROR: "AI Ops Dashboard shows simulated data instead of live data"
+  CAUSE: The AI Engine (port 8000) is not running
+  FIX:   Start it: cd ai-engine && python main.py
+  NOTE:  This is expected behavior. The dashboard automatically falls back
+         to built-in simulation data that looks identical to live data.
+
+  ERROR: "Google Maps shows a simulated map with colored dots"
+  CAUSE: No Google Maps API key configured
+  FIX:   Add VITE_GOOGLE_MAPS_API_KEY=your_key to .env
+  NOTE:  The simulated map is fully functional. This is by design.
+
+  ERROR: Docker build runs out of memory
+  FIX:   Open Docker Desktop → Settings → Resources
+         Increase Memory to 4 GB or higher
+         Click "Apply & Restart"
+
+  ERROR: "vite build" produces a very large file
+  NOTE:  This is normal. The project uses Three.js for 3D rendering
+         and many chart/animation libraries. The gzip size is ~700-800 KB
+         which is acceptable for an enterprise dashboard application.
+
+  ERROR: Webcam not working in Scanner
+  CAUSE: Browser blocked camera access
+  FIX:   Click the camera/lock icon in the browser address bar
+         Allow camera access for localhost
+         Reload the page
+
+  ERROR: "failed to fetch" or "network error" when using Scanner
+  CAUSE: Backend is not running
+  FIX:   Start the backend: npm run dev:server
+  NOTE:  Scanner works without the backend. Mock predictions are generated
+         directly in the browser.
+
+================================================================================
+  SECTION 9  -  PROJECT FOLDER STRUCTURE EXPLAINED
+================================================================================
+
+  ecovision-ai/
+  │
+  ├── src/                          REACT FRONTEND
+  │   ├── App.tsx                   Main app with routing
+  │   ├── main.tsx                  Entry point
+  │   ├── index.css                 Global styles and effects
+  │   ├── features/                 Feature-based architecture
+  │   │   ├── landing/              Landing page with 3D Earth
+  │   │   ├── scanner/              AI waste scanner
+  │   │   ├── maps/                 Recycling center map
+  │   │   ├── analytics/            Sustainability dashboard
+  │   │   ├── ai-ops/               AI Operations dashboard
+  │   │   ├── gamification/         Points, challenges, leaderboard
+  │   │   ├── circular/             Education module
+  │   │   ├── profile/              User profile
+  │   │   ├── auth/                 Login, register, OTP, forgot password
+  │   │   ├── assistant/            AI chatbot
+  │   │   ├── smart-bin/            QR code module
+  │   │   ├── reports/              Downloadable reports
+  │   │   └── errors/               404 page
+  │   └── shared/                   Shared code
+  │       ├── api/                  API clients and types
+  │       ├── components/           Reusable UI components
+  │       ├── hooks/                Custom React hooks
+  │       └── stores/               Zustand state stores
+  │
+  ├── server/                       NODE.JS BACKEND
+  │   ├── server.ts                 Entry point
+  │   ├── app.ts                    Express app setup
+  │   ├── config/                   DB, Redis, Logger, Swagger config
+  │   ├── constants/                Enums and role permissions
+  │   ├── controllers/              Request handlers
+  │   ├── middleware/               Auth, security, upload, error, audit
+  │   ├── models/                   25 Mongoose schemas
+  │   ├── repositories/             Data access layer with caching
+  │   ├── routes/                   API route definitions
+  │   ├── services/                 Business logic layer
+  │   ├── sockets/                  Socket.IO real-time engine
+  │   ├── jobs/                     Cron job scheduler
+  │   ├── validations/              Express-validator rules
+  │   ├── utils/                    Email service, geo calculations
+  │   └── docs/                     OpenAPI schema definitions
+  │
+  ├── ai-engine/                    PYTHON AI MICROSERVICE
+  │   ├── main.py                   FastAPI entry point
+  │   ├── config/                   Settings and environment
+  │   ├── api/                      REST API routes (20+ endpoints)
+  │   ├── models/                   Inference engine, registry, monitoring
+  │   ├── preprocessing/            Image pipeline, dataset management
+  │   ├── training/                 Trainer, evaluator, experiment tracking
+  │   ├── utils/                    Visualization, Grad-CAM, annotations
+  │   ├── requirements.txt          Python dependencies
+  │   └── Dockerfile                GPU-ready Docker image
+  │
+  ├── scripts/                      Database initialization
+  ├── .env                          Environment variables (edit this)
+  ├── .env.example                  Reference template
+  ├── docker-compose.yml            Docker orchestration
+  ├── Dockerfile                    Full-stack Docker image
+  ├── package.json                  Node.js dependencies and scripts
+  ├── tsconfig.json                 TypeScript configuration
+  ├── vite.config.ts                Vite bundler configuration
+  ├── SETUP_GUIDE.md                Detailed setup guide
+  └── FOLLOW_UP_INSTRUCTIONS.txt    This file
+
+================================================================================
+  SECTION 10 -  HOW TO DEPLOY TO PRODUCTION
+================================================================================
+
+  OPTION A: RAILWAY (Easiest, free tier)
+  1. Push your code to GitHub
+  2. Go to https://railway.app
+  3. Click "New Project" → "Deploy from GitHub"
+  4. Select your repo
+  5. Railway auto-detects Node.js and sets up the build
+  6. Add environment variables in Railway dashboard (copy from .env)
+  7. Add a MongoDB plugin (Railway provides free MongoDB)
+  8. Your app gets a public URL automatically
+
+  OPTION B: RENDER (Free tier, good for demos)
+  1. Push to GitHub
+  2. Go to https://render.com
+  3. Create a "Web Service" → connect your repo
+  4. Build command: npm run build
+  5. Start command: npx tsx server/index.ts
+  6. Add env vars from .env
+  7. Create a free MongoDB Atlas cluster and add the MONGO_URI
+
+  OPTION C: VERCEL (Frontend) + RENDER (Backend)
+  1. Deploy frontend to Vercel: connect GitHub repo, auto-detects Vite
+  2. Deploy backend to Render as above
+  3. Set VITE_API_URL to point to Render backend URL
+
+  OPTION D: DOCKER ON ANY CLOUD
+  1. Build: docker build -t ecovision-ai .
+  2. Push to Docker Hub or AWS ECR
+  3. Deploy on AWS ECS, Google Cloud Run, Azure Container Instances,
+     or any Kubernetes cluster
+
+  PRODUCTION SECURITY CHECKLIST:
+  - Change JWT_SECRET, REFRESH_TOKEN_SECRET, COOKIE_SECRET to random
+    64-character strings. Generate with: node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+  - Set NODE_ENV=production
+  - Use HTTPS (add SSL certificate or use Cloudflare)
+  - Set CORS origin to your actual domain instead of *
+  - Use MongoDB Atlas with authentication
+  - Set RATE_LIMIT_MAX to a lower value (e.g., 100)
+  - Remove or restrict Swagger docs in production
+
+================================================================================
+  END OF INSTRUCTIONS
+================================================================================
+
+  Summary of commands:
+
+  Frontend only:        npm run dev
+  Backend only:         npm run dev:server
+  Both together:        npm run dev:all
+  AI Engine:            cd ai-engine && python main.py
+  Docker everything:    docker-compose up --build
+  Build for production: npm run start:prod
+
+  URLs when running:
+
+  Frontend:             http://localhost:5173
+  Backend API:          http://localhost:5000/api/v1/health
+  Backend Swagger:      http://localhost:5000/api/docs
+  AI Engine Docs:       http://localhost:8000/docs
+  AI Engine Health:     http://localhost:8000/api/v1/health
+  Mongo Express (Docker): http://localhost:8081
+
+  Need help? Check SETUP_GUIDE.md for more detailed explanations.
+
+================================================================================
